@@ -10,7 +10,6 @@ using System.Linq;
  * mover eternamente pero siempre está detectando que hay borde, así que no creo que ese sea el problema. Debe ser la lógica en las
  * condiciones de movimiento.
  * 
- * -No es bug, pero estaría bien que no avance a la vez que rota cuando hay una caída en frente. (Que únicamente rote, y una vez acabado, siga avanzando)
  */
 
 
@@ -155,20 +154,15 @@ public class Minion : MonoBehaviour
 
     private void CheckFrontObstacle()
     {
-        if (Physics.Raycast(fallChecker.position, Vector3.down, out RaycastHit hit, 1.5f))
+        if (Physics.Raycast(fallChecker.position, Vector3.down, out RaycastHit hit, 1.45f))
         {
-            Debug.Log("Something is in front of me...");
+            Debug.Log("Something is in front of me... " + IsGrounded());
             //Aquí verifica que choque con algo que puede brincar
-            if (IsGrounded() && Vector3.Distance(fallChecker.position, hit.point) > 0.5f)
+            if (IsGrounded() && Vector3.Distance(fallChecker.position, hit.point) >= 0.45f)
             {
                 //Debug.DrawRay(fallChecker.position, Vector3.down * 1.5f, Color.yellow);
                 Debug.Log("Jumping now!");
                 Jump();
-            }
-            else
-            {
-                print("I'm flying!");
-                rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
             }
         }
     }
